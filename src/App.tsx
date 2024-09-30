@@ -8,7 +8,6 @@ function App() {
   return (
     <div className="App">
 		<header className="App-header">
-			<h1>Display something</h1>
 			<HashRouter>
 				<Routes>
 					<Route path="/" element={<Login />} />
