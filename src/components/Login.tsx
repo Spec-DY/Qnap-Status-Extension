@@ -37,9 +37,21 @@ export default function Login(){
         try{
             const response = await login(credentials);
             if (response.data && response.status == 200) {
+                const sessionToken = response.data.sessionToken;
+                chrome.storage.local.set({
+                    userInfo: {
+                        username,
+                        sessionToken,
+                        IP,
+                        port,
+                        password
+                    }
+                }, function () {
+                    console.log('User information (including IP, port, etc.) is saved.');
+                });
                 navigate("/systemstatus")
             }else{
-                navigate("/")
+                navigate("/login")
             }
         }catch (error){
             setError(true)

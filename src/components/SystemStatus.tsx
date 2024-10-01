@@ -1,43 +1,61 @@
-import { fetchSystemStatus } from "../client"
 import { useEffect, useState } from "react";
+import { fetchSystemStatus } from "../client";
 
-export default function SystemStatus() {
+interface UserInfo {
+  IP: string;
+  port: number;
+  username: string;
+  password: string;
+}
 
-    interface CPUStatus{
-        model:string,
-        temp_c:number,
-        temp_f:number,
-        usage_percent:number
-    }
-    interface RAMStatus{
-        free:number,
-        total:number
-    }
+interface CPUStatus{
+    model:string,
+    temp_c:number,
+    temp_f:number,
+    usage_percent:number
+}
+interface RAMStatus{
+    free:number,
+    total:number
+}
 
-    const [status, setStatus] = useState<[CPUStatus,RAMStatus] | null>(null)
-    
-    async function getStatus() {
-        const response = await fetchSystemStatus();
-        setStatus(response.data)
-    }
+export default function SystemStatus({ userInfo }: { userInfo: UserInfo }) {
+  const [status, setStatus] = useState<[CPUStatus,RAMStatus] | null>(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(''); 
 
-    useEffect(()=>{
-        getStatus()
-    },[])
+  useEffect(() => {
+    const { IP, port, username, password } = userInfo;
+    fetchSystemStatus(IP, port, username, password)
+      .then((response) => {
+        setStatus(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to fetch NAS status");
+        setLoading(false);
+      });
+  }, [userInfo]);
 
-    console.log(status)
+  if (loading) {
+    return <div>Loading NAS status...</div>; 
+  }
 
-    let used:number = 0;
-    let total:number = 0;
-    if (status) {
-        used = status[1].total - status[1].free
-        used = Math.round((used / 1024) *100) / 100
-        total = Math.round((status[1].total/1024)*100) / 100
-    }
-    
+  if (error) {
+    return <div>{error}</div>; 
+  }
 
+  
+  let used:number = 0;
+  let total:number = 0;
+  if (status) {
+      used = status[1].total - status[1].free
+      used = Math.round((used / 1024) *100) / 100
+      total = Math.round((status[1].total/1024)*100) / 100
+  }
+  
 
-    return (
+  return (
         <div>
             {status? (
             <div>
@@ -52,7 +70,6 @@ export default function SystemStatus() {
                 loading...
                 </>
             )}
-
         </div>
-    )
+  );
 }

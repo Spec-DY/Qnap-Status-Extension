@@ -8,8 +8,19 @@ export async function login(credentials:any) {
     return response
 }
 
-export async function fetchSystemStatus() {
-    const response = await axios.get(`${STATES_API}/systemstatus`, {withCredentials:true})
-    return response
+export async function fetchSystemStatus(IP: string, port: number, username: string, password: string) {
+
+    const response = await axios.get(`${STATES_API}/systemstatus`, {
+        params: {
+            IP,
+            port,
+            username,
+            password
+        },
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    return response;
 }
 
