@@ -3,7 +3,14 @@ import "./App.css";
 import SystemStatus from "./components/SystemStatus";
 import Login from "./components/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Route,
+  Routes,
+  Link,
+  useNavigate,
+} from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import {
   Container,
   AppBar,
@@ -11,11 +18,18 @@ import {
   Typography,
   CircularProgress,
   Box,
+  BottomNavigation,
+  BottomNavigationAction,
 } from "@mui/material";
+import DiskDetail from "./components/DiskDetail";
+
+import StorageIcon from "@mui/icons-material/Storage";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [value, setValue] = useState("system");
 
   useEffect(() => {
     chrome.storage.local.get("userInfo", (result) => {
@@ -54,17 +68,47 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container>
-        <HashRouter>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Container>
           <Routes>
             {userInfo ? (
-              <Route path="/" element={<SystemStatus userInfo={userInfo} />} />
+              <>
+                <Route
+                  path="/"
+                  element={<SystemStatus userInfo={userInfo} />}
+                />
+                <Route path="/disk" element={<DiskDetail />} />
+              </>
             ) : (
               <Route path="/" element={<Login />} />
             )}
           </Routes>
-        </HashRouter>
-      </Container>
+        </Container>
+        <Box sx={{ position: "fixed", bottom: 0, width: "100%" }}>
+          <BottomNavigation
+            value={value}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+            showLabels
+          >
+            <BottomNavigationAction
+              label="System"
+              value="system"
+              icon={<SettingsIcon />}
+              component={Link}
+              to="/"
+            />
+            <BottomNavigationAction
+              label="Disk"
+              value="disk"
+              icon={<StorageIcon />}
+              component={Link}
+              to="/disk"
+            />
+          </BottomNavigation>
+        </Box>
+      </Router>
     </div>
   );
 }

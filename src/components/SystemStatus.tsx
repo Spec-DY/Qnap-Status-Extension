@@ -104,7 +104,7 @@ export default function SystemStatus({ userInfo }: { userInfo: UserInfo }) {
   return (
     <div className="h-auto">
       {status ? (
-        <div style={{ marginTop: 40 }}>
+        <div style={{ marginTop: 25 }}>
           <Typography sx={{ display: "flex", alignItems: "center" }}>
             <MemoryIcon sx={{ mr: 1 }} />
             <span>CPU: {cpuModelShort}</span>
