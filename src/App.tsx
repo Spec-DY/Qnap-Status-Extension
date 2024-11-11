@@ -1,16 +1,24 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import SystemStatus from './components/SystemStatus';
-import Login from './components/Login';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import "./App.css";
+import SystemStatus from "./components/SystemStatus";
+import Login from "./components/Login";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { HashRouter, Route, Routes } from "react-router-dom";
+import {
+  Container,
+  AppBar,
+  Toolbar,
+  Typography,
+  CircularProgress,
+  Box,
+} from "@mui/material";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    chrome.storage.local.get('userInfo', (result) => {
+    chrome.storage.local.get("userInfo", (result) => {
       if (result.userInfo) {
         setUserInfo(result.userInfo);
       }
@@ -19,12 +27,34 @@ function App() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Container>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="100vh"
+        >
+          <CircularProgress />
+          <Typography>Loading...</Typography>
+        </Box>
+      </Container>
+    );
   }
 
   return (
     <div className="App">
-      <header className="App-header">
+      <AppBar position="static">
+        <Toolbar>
+          <Typography
+            sx={{ display: "flex", alignItems: "center" }}
+            variant="h6"
+          >
+            Qnap Status
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Container>
         <HashRouter>
           <Routes>
             {userInfo ? (
@@ -34,7 +64,7 @@ function App() {
             )}
           </Routes>
         </HashRouter>
-      </header>
+      </Container>
     </div>
   );
 }
