@@ -1,26 +1,12 @@
 import { useEffect, useState } from "react";
 import { fetchSystemStatus } from "../client";
-import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  CircularProgress,
-  Alert,
-  Divider,
-  Box,
-  Grid,
-} from "@mui/material";
+import { Container, Typography, CircularProgress, Alert } from "@mui/material";
 
 import MemoryIcon from "@mui/icons-material/Memory";
 import StorageIcon from "@mui/icons-material/Storage";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-
-import { GoCpu } from "react-icons/go";
-import { LiaMemorySolid } from "react-icons/lia";
-import { GrCapacity } from "react-icons/gr";
 
 import PieChartIcon from "@mui/icons-material/PieChart";
 

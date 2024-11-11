@@ -70,6 +70,7 @@ function App() {
       </AppBar>
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Container>
+          {/* this is HashRouter instead of deal with route like '/' */}
           <Routes>
             {userInfo ? (
               <>
@@ -77,7 +78,10 @@ function App() {
                   path="/"
                   element={<SystemStatus userInfo={userInfo} />}
                 />
-                <Route path="/disk" element={<DiskDetail />} />
+                <Route
+                  path="/disk"
+                  element={<DiskDetail userInfo={userInfo} />}
+                />
               </>
             ) : (
               <Route path="/" element={<Login />} />
@@ -91,6 +95,7 @@ function App() {
               setValue(newValue);
             }}
             showLabels
+            sx={{ backgroundColor: "#cdddf7" }}
           >
             <BottomNavigationAction
               label="System"
